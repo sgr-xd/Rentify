@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 from config import Config
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config) 
 mongo_client = os.environ.get('MONGO_URI')
 if mongo_client is None:
