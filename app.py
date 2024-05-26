@@ -251,4 +251,5 @@ def like_property():
     return redirect(url_for('buyer_dashboard'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.debug = False
+    app.run()
