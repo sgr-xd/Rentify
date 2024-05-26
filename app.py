@@ -12,7 +12,7 @@ mongo_client = os.environ.get('MONGO_URI')
 if mongo_client is None:
     raise ValueError("MONGO_URI environment variable is not set")
 
-app.config['MONGO_URI'] = mongo_client
+app.config['MONGO_URI'] = "mongodb+srv://nerdzspot:25wIAW9JYS1Z6UFR@rentify.olkqeyx.mongodb.net/rentify_db"
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
