@@ -7,7 +7,7 @@ from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config) 
-mongo_client = PyMongo(app, uri=app.config['MONGODB_URI'])
+mongo_client = PyMongo(app, uri=app.config['mongo_uri'])
 db = mongo_client.cx[app.config['MONGO_DBNAME']]
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
