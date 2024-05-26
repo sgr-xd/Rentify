@@ -1,5 +1,8 @@
 {% extends "base.html" %} {% block title %}Buyer Dashboard{% endblock %} {%
 block content %}
+{% set email_js_user_id = os.environ.get('EMAILJS_USER_ID') %}
+{% set service_id = os.environ.get('EMAILJS_SERVICE_ID') %}
+{% set template_id = os.environ.get('EMAILJS_TEMPLATE_ID') %}
 <link
   rel="stylesheet"
   href="{{ url_for('static', filename='css/buyer_dashboard.css') }}"
@@ -85,7 +88,8 @@ block content %}
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
     (function() {
-        emailjs.init("<EMAILJS_USERID>");
+        const email_js_user_id = "{{ email_js_user_id }}";
+        emailjs.init(email_js_user_id);
     })();
 
     function showSellerDetails(sellerId) {
@@ -116,8 +120,10 @@ block content %}
             buyer_phone_number: sellerData.buyer_phone_number, 
             buyer_email: sellerData.buyer_email,
         };
+        const service_id = "{{ service_id }}";
+        const template_id = "{{ template_id }}";
 
-        emailjs.send('<SERVICE_ID>', '<TEMPLATE_ID>', buyerDetails)
+        emailjs.send(service_id, template_id, buyerDetails)
             .then((response) => {
                 console.log('SUCCESS!', response.status, response.text);
             }, (error) => {
