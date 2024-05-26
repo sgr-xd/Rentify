@@ -9,7 +9,10 @@ import os
 app = Flask(__name__)
 app.config.from_object(Config) 
 mongo_client = os.environ.get('MONGO_URI')
+if mongo_client is None:
+    raise ValueError("MONGO_URI environment variable is not set")
 db = "rentify_db"
+app.config['MONGO_URI'] = mongo_client
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
