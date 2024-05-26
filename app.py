@@ -4,11 +4,12 @@ from flask_bcrypt import Bcrypt
 from forms import RegistrationForm, LoginForm, PropertyForm
 from bson.objectid import ObjectId
 from config import Config
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config) 
-mongo_client = PyMongo(app, uri=app.config['mongo_uri'])
-db = mongo_client.cx[app.config['MONGO_DBNAME']]
+mongo_client = os.environ.get('MONGO_URI')
+db = "rentify_db"
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
