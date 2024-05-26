@@ -88,6 +88,7 @@ def dashboard():
             if role:
                 if role == 'buyer':
                     session['user_id'] = str(user['_id'])
+                    
                     return redirect(url_for('buyer_dashboard'))
                 elif role == 'seller':
                     session['user_id'] = str(user['_id'])
@@ -114,6 +115,9 @@ from flask import request
 
 @app.route('/buyer_dashboard')
 def buyer_dashboard():
+    email_js_user_id = os.environ.get('EMAILJS_USER_ID')
+    service_id = os.environ.get('EMAILJS_SERVICE_ID')
+    template_id = os.environ.get('EMAILJS_TEMPLATE_ID')
     filter_place = request.args.get('place')
     filter_area = request.args.get('area')
     filter_bedrooms = request.args.get('bedrooms')
@@ -148,7 +152,7 @@ def buyer_dashboard():
         for property in filtered_properties:
             property['liked'] = user_id in property.get('liked_by', [])
     
-    return render_template('buyer_dashboard.html', title='Buyer Dashboard', properties=filtered_properties,first_name=first_name, last_name=last_name)
+    return render_template('buyer_dashboard.html', title='Buyer Dashboard', properties=filtered_properties,first_name=first_name, last_name=last_name,email_js_user_id=email_js_user_id,service_id=service_id,template_id=template_id)
 
 
 

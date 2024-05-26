@@ -1,8 +1,5 @@
 {% extends "base.html" %} {% block title %}Buyer Dashboard{% endblock %} {%
 block content %}
-{% set email_js_user_id = os.environ.get('EMAILJS_USER_ID') %}
-{% set service_id = os.environ.get('EMAILJS_SERVICE_ID') %}
-{% set template_id = os.environ.get('EMAILJS_TEMPLATE_ID') %}
 <link
   rel="stylesheet"
   href="{{ url_for('static', filename='css/buyer_dashboard.css') }}"
