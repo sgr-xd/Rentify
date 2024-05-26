@@ -12,7 +12,7 @@ mongo_client = os.environ.get('MONGO_URI')
 if mongo_client is None:
     raise ValueError("MONGO_URI environment variable is not set")
 
-app.config['MONGO_URI'] = "mongodb+srv://nerdzspot:25wIAW9JYS1Z6UFR@rentify.olkqeyx.mongodb.net/rentify_db"
+app.config['MONGO_URI'] = mongo_client
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
@@ -250,6 +250,7 @@ def like_property():
     
     return redirect(url_for('buyer_dashboard'))
 
+port = int(os.environ.get('PORT', 5000))
 if __name__ == '__main__':
     app.debug = False
-    app.run()
+    app.run(host='127.0.0.1', port=port)
