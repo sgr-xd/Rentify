@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Choose Role{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2>Choose Your Role</h2>
+        <form method="POST">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg btn-block" name="role" value="buyer">Buyer</button>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-secondary btn-lg btn-block" name="role" value="seller">Seller</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "base.html" %} {% block title %}Buyer Dashboard{% endblock %} {%
+block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/buyer_dashboard.css') }}"
+/>
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="text-right">
+          <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">Home</a>
+          <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
+            <button type="submit" class="btn btn-outline-danger">Logout</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <h2>Welcome {{ first_name }} {{ last_name }} !</h2>
+    <!-- Filter inputs -->
+    <div class="filter-widget">
+      <h3>Filter Properties</h3>
+      <div class="filter-row">
+        <input type="text" id="filterPlace" placeholder="Place" />
+        <input type="text" id="filterArea" placeholder="Area" />
+      </div>
+      <div class="filter-row">
+        <input type="number" id="filterBedrooms" placeholder="Bedrooms" />
+        <input type="number" id="filterBathrooms" placeholder="Bathrooms" />
+      </div>
+      <div class="filter-row">
+        <input
+          type="text"
+          id="filterHospitals"
+          placeholder="Hospitals Nearby"
+        />
+        <input type="text" id="filterColleges" placeholder="Colleges Nearby" />
+      </div>
+      <button onclick="applyFilter()">Apply Filter</button>
+      <button onclick="resetFilter()">Reset Filter</button>
+    </div>
+
+    <!-- Properties -->
+  </div>
+  <div class="row">
+    {% for property in properties %}
+    <div class="col-md-6">
+      <div class="property-card" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px">
+        <h4>{{ property.place }} - {{ property.area }}</h4>
+        <p><strong>Bedrooms:</strong> {{ property.bedrooms }}</p>
+        <p><strong>Bathrooms:</strong> {{ property.bathrooms }}</p>
+        <p><strong>Hospitals Nearby:</strong> {{ property.hospitals_nearby }}</p>
+        <p><strong>Colleges Nearby:</strong> {{ property.colleges_nearby }}</p>
+        <div class="property-buttons">
+          <form action="{{ url_for('interested') }}" method="post" style="display: inline">
+            <input type="hidden" name="property_id" value="{{ property._id }}">
+            <button type="button" onclick="showSellerDetails('{{ property.seller_id }}')" class="btn btn-primary btn-sm">
+              I'm Interested
+            </button>
+          </form>
+          <form action="{{ url_for('like_property') }}" method="post" style="display: inline">
+            <input type="hidden" name="property_id" value="{{ property._id }}">
+            <button type="submit" class="btn btn-success btn-sm">
+              {% if property.liked %}Liked: <span>{{ property.likes or 0 }}</span>{% else %}Like{% endif %}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="popupCard" class="popupCard">
+  <div class="popupContent">
+    <span class="closeBtn" onclick="closePopup()">&times;</span>
+    <h3>Seller Details</h3>
+    <p id="sellerDetails"></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+    (function() {
+        emailjs.init("<EMAILJS_USERID>");
+    })();
+
+    function showSellerDetails(sellerId) {
+        fetch(`/seller_details/${sellerId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    const sellerDetails = `Seller Name: ${data.first_name} ${data.last_name}<br>Email: ${data.email}<br>Phone: ${data.phone_number}`;
+                    document.getElementById('sellerDetails').innerHTML = sellerDetails;
+                    document.getElementById('popupCard').style.display = 'block';
+                    
+                    // Sending buyer details to the seller using EmailJS
+                    sendBuyerDetailsToSeller(data);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function sendBuyerDetailsToSeller(sellerData) {
+        console.log(sellerData)
+        const buyerDetails = {
+            seller_first_name: sellerData.first_name,
+            seller_last_name: sellerData.last_name,
+            buyer_first_name: sellerData.buyer_first_name,
+            buyer_last_name: sellerData.buyer_last_name, 
+            buyer_phone_number: sellerData.buyer_phone_number, 
+            buyer_email: sellerData.buyer_email,
+        };
+
+        emailjs.send('<SERVICE_ID>', '<TEMPLATE_ID>', buyerDetails)
+            .then((response) => {
+                console.log('SUCCESS!', response.status, response.text);
+            }, (error) => {
+                console.log('FAILED...', error);
+            });
+    }
+    
+    function closePopup() {
+        document.getElementById('popupCard').style.display = 'none';
+    }
+  // Function to filter properties based on user input
+  function applyFilter() {
+    const filterPlace = document.getElementById("filterPlace").value;
+    const filterArea = document.getElementById("filterArea").value;
+    const filterBedrooms = document.getElementById("filterBedrooms").value;
+    const filterBathrooms = document.getElementById("filterBathrooms").value;
+    const filterHospitals = document.getElementById("filterHospitals").value;
+    const filterColleges = document.getElementById("filterColleges").value;
+
+    // Construct the URL with filter parameters
+    const url =
+      window.location.origin +
+      window.location.pathname +
+      `?place=${filterPlace}&area=${filterArea}&bedrooms=${filterBedrooms}&bathrooms=${filterBathrooms}&hospitals=${filterHospitals}&colleges=${filterColleges}`;
+
+    window.location.href = url;
+  }
+
+  // Function to reset filter
+  function resetFilter() {
+    // Clear the values of all filter inputs
+    document.getElementById("filterPlace").value = "";
+    document.getElementById("filterArea").value = "";
+    document.getElementById("filterBedrooms").value = "";
+    document.getElementById("filterBathrooms").value = "";
+    document.getElementById("filterHospitals").value = "";
+    document.getElementById("filterColleges").value = "";
+
+    applyFilter();
+  }
+
+  
+</script>
+
+{% endblock %}

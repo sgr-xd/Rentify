@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="text-center">
+        <h1 class="mb-4">Welcome to Rentify</h1>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mr-2">Register</a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg">Login</a>
+    </div>
+</div>
+{% endblock %}

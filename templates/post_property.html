@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Post Property{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2>Post Your Property</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.place.label(class="form-control-label") }}
+                {{ form.place(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.area.label(class="form-control-label") }}
+                {{ form.area(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.bedrooms.label(class="form-control-label") }}
+                {{ form.bedrooms(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.bathrooms.label(class="form-control-label") }}
+                {{ form.bathrooms(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.hospitals_nearby.label(class="form-control-label") }}
+                {{ form.hospitals_nearby(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.colleges_nearby.label(class="form-control-label") }}
+                {{ form.colleges_nearby(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
